@@ -1,0 +1,158 @@
+<section mat-dialog-content>
+  <mat-icon (click)="closeDialog()">close</mat-icon>
+  <form [formGroup]="employeeForm" (ngSubmit)="saveEmployee()" class="form">
+    <mat-form-field appearance="fill" class="input-background">
+      <mat-label>First name</mat-label>
+      <input matInput formControlName="firstName" placeholder="First name" />
+      <mat-error
+        *ngIf="
+          employeeForm.controls['firstName'].errors &&
+          employeeForm.controls['firstName'].touched
+        "
+      >
+        First name is required and must be at least 2 characters long.
+      </mat-error>
+    </mat-form-field>
+    <br />
+    <mat-form-field appearance="fill">
+      <mat-label>Last name</mat-label>
+      <input matInput formControlName="lastName" placeholder="Last name" />
+      <mat-error
+        *ngIf="
+          employeeForm.controls['lastName'].errors &&
+          employeeForm.controls['lastName'].touched
+        "
+      >
+        Last name is required and must be at least 2 characters long.
+      </mat-error>
+    </mat-form-field>
+    <br />
+    <mat-form-field appearance="fill" *ngIf="!isEmployeeIdDisabled">
+      <mat-label>Employee ID</mat-label>
+      <input matInput formControlName="employeeId" placeholder="Employee ID" />
+      <mat-error
+        *ngIf="
+          employeeForm.controls['employeeId'].errors &&
+          employeeForm.controls['employeeId'].touched
+        "
+      >
+        Employee ID is required and must contain only numbers.
+      </mat-error>
+    </mat-form-field>
+    <br />
+    <mat-form-field appearance="fill">
+      <mat-label>Start Date</mat-label>
+      <input
+        matInput
+        [matDatepicker]="picker"
+        formControlName="startDate"
+        placeholder="Start Date"
+      />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error
+        *ngIf="
+          employeeForm.controls['startDate'].errors &&
+          employeeForm.controls['startDate'].touched
+        "
+      >
+        Start Date is required.
+      </mat-error>
+    </mat-form-field>
+    <br />
+
+    <mat-form-field appearance="fill">
+      <mat-label>Birth Date</mat-label>
+      <input
+        matInput
+        formControlName="birthDate"
+        placeholder="Birth Date"
+        [matDatepicker]="picker2"
+      />
+      <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+      <mat-datepicker #picker2></mat-datepicker>
+      <mat-error
+        *ngIf="
+          employeeForm.controls['birthDate'].errors &&
+          employeeForm.controls['birthDate'].touched
+        "
+      >
+        Birth Date is required.
+      </mat-error>
+    </mat-form-field>
+    <br />
+
+    <mat-form-field appearance="fill">
+      <mat-label>Gender</mat-label>
+      <mat-select formControlName="gender" placeholder="Gender">
+        <mat-option
+          *ngFor="let option of genderOptions"
+          [value]="option.value"
+          >{{ option.label }}</mat-option
+        >
+      </mat-select>
+      <mat-error
+        *ngIf="
+          employeeForm.controls['gender'].errors &&
+          employeeForm.controls['gender'].touched
+        "
+      >
+        Gender is required.
+      </mat-error>
+    </mat-form-field>
+    <br />
+    <form [formGroup]="roleForm">
+      <h1>Role</h1>
+      <div formArrayName="employeeRoles">
+        <div
+          *ngFor="let employeeRole of roleList.controls; let i = index"
+          [formGroupName]="i"
+        >
+          <mat-form-field appearance="fill">
+            <mat-label>Roles</mat-label>
+            <mat-select formControlName="roleId">
+              <mat-option
+                *ngFor="let role of roles"
+                [value]="role.id"
+                [disabled]="isRoleExist(role)"
+                >{{ role.name }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+          <br />
+          <mat-form-field appearance="fill">
+            <mat-label>Management</mat-label>
+            <mat-select formControlName="isManagement">
+              <mat-option
+                *ngFor="let option of isManagmentOptions"
+                [value]="option.value"
+                >{{ option.label }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+          <br />
+
+          <mat-form-field appearance="fill">
+            <mat-label>Start Date</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker3"
+              formControlName="startDate"
+              placeholder="Choose a date"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker3"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker3></mat-datepicker>
+          </mat-form-field>
+          <br />
+        </div>
+      </div>
+    </form>
+    <button mat-raised-button color="primary" type="submit">Submit</button>
+  </form>
+  <button mat-button color="primary" (click)="openRoleDialog()">
+    Add Role
+  </button>
+</section>
